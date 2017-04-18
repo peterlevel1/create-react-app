@@ -102,7 +102,7 @@ module.exports = function(
     command = 'yarnpkg';
     args = ['add'];
   } else {
-    command = 'npm';
+    command = 'cnpm';
     args = ['install', '--save', verbose && '--verbose'].filter(e => e);
   }
   args.push('react', 'react-dom');
