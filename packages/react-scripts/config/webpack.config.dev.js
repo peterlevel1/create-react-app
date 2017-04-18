@@ -19,6 +19,32 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 
+function addPkgAlias(opts) {
+  var appPath = paths.appPath
+  if (!appPath) {
+    throw new Error('react scripts: no app path')
+  }
+
+  var pkgPath = path.join(appPath, 'package.json')
+  var alias
+  try {
+    var str = require('fs').readFileSync(pkgPath, 'utf8')
+    var json = JSON.parse(str)
+    alias = json.alias
+  } catch (e) {}
+
+  if (!alias) {
+    return opts
+  }
+
+  for (var p in alias) {
+    alias[p] = path.join(appPath, alias[p])
+  }
+
+  Object.assign(opts.alias, alias)
+  return opts
+}
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
@@ -73,7 +99,7 @@ module.exports = {
     // This is the URL that app is served from. We use "/" in development.
     publicPath: publicPath,
   },
-  resolve: {
+  resolve: addPkgAlias({
     // This allows you to set a fallback for where Webpack should look for modules.
     // We read `NODE_PATH` environment variable in `paths.js` and pass paths here.
     // We placed these paths second because we want `node_modules` to "win"
@@ -90,7 +116,7 @@ module.exports = {
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
     },
-  },
+  }),
   // @remove-on-eject-begin
   // Resolve loaders (webpack plugins for CSS, images, transpilation) from the
   // directory of `react-scripts` itself rather than the project directory.
