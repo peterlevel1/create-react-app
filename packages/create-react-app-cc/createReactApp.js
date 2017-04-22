@@ -302,7 +302,7 @@ function run(root, appName, version, verbose, originalDirectory, template) {
 }
 
 function getInstallPackage(version) {
-  let packageToInstall = 'react-scripts';
+  let packageToInstall = 'react-scripts-cc';
   const validSemver = semver.valid(version);
   if (validSemver) {
     packageToInstall += `@${validSemver}`;
