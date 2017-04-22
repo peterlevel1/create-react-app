@@ -54,7 +54,7 @@ root_path=$PWD
 # Install all our packages
 "$root_path"/node_modules/.bin/lerna bootstrap
 
-cd packages/react-scripts
+cd packages/react-scripts-cc
 
 # Save package.json because we're going to touch it
 cp package.json package.json.orig
