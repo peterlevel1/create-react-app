@@ -19,31 +19,8 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 
-function addPkgAlias(opts) {
-  var appPath = paths.appPath
-  if (!appPath) {
-    throw new Error('react scripts: no app path')
-  }
-
-  var pkgPath = path.join(appPath, 'package.json')
-  var alias
-  try {
-    var str = require('fs').readFileSync(pkgPath, 'utf8')
-    var json = JSON.parse(str)
-    alias = json.alias
-  } catch (e) {}
-
-  if (!alias) {
-    return opts
-  }
-
-  for (var p in alias) {
-    alias[p] = path.join(appPath, alias[p])
-  }
-
-  Object.assign(opts.alias, alias)
-  return opts
-}
+// ================================================
+const addPkgAlias = require('./utils/addPkgAlias')
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -80,7 +57,11 @@ module.exports = {
     // We ship a few polyfills by default:
     require.resolve('./polyfills'),
     // Errors should be considered fatal in development
-    require.resolve('react-dev-utils/crashOverlay'),
+
+    // ---------------
+    // req uire.resolve('react-dev-utils/crashOverlay'),
+    // ---------------
+
     // Finally, this is your app's code:
     paths.appIndexJs,
     // We include the app code last so that if there is a runtime error during
@@ -99,7 +80,7 @@ module.exports = {
     // This is the URL that app is served from. We use "/" in development.
     publicPath: publicPath,
   },
-  resolve: addPkgAlias({
+  resolve: addPkgAlias(paths, {
     // This allows you to set a fallback for where Webpack should look for modules.
     // We read `NODE_PATH` environment variable in `paths.js` and pass paths here.
     // We placed these paths second because we want `node_modules` to "win"
