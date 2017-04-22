@@ -191,7 +191,7 @@ function install(useYarn, dependencies, verbose, isOnline) {
       }
     } else {
       checkNpmVersion();
-      command = 'npm';
+      command = 'cnpm';
       args = ['install', '--save', '--save-exact'].concat(dependencies);
     }
 
@@ -457,7 +457,7 @@ function checkAppName(appName) {
 
   // TODO: there should be a single place that holds the dependencies
   const dependencies = ['react', 'react-dom'];
-  const devDependencies = ['react-scripts'];
+  const devDependencies = ['react-scripts-cc'];
   const allDependencies = dependencies.concat(devDependencies).sort();
   if (allDependencies.indexOf(appName) >= 0) {
     console.error(
